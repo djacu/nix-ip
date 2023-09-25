@@ -1,32 +1,75 @@
 {lib}: let
-  bitMaskToSubnetMask = let
-    # Generate a partial mask for an integer from 0 to 7
-    #   part 1 = 128
-    #   part 7 = 254
-    part = n:
-      if n == 0
-      then 0
-      else part (n - 1) / 2 + 128;
-  in
-    cidr: let
-      # How many initial parts of the mask are full (=255)
-      fullParts = cidr / 8;
-    in
-      lib.genList (
-        i:
-        # Fill up initial full parts
-          if i < fullParts
-          then 255
-          # If we're above the first non-full part, fill with 0
-          else if fullParts < i
-          then 0
-          # First non-full part generation
-          else part (lib.mod cidr 8)
-      )
-      4;
+  /*
+  Given a bit mask, return the associated subnet mask.
 
-  parseIpAddr = ipAddr:
-    builtins.map lib.toInt (builtins.match "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" ipAddr);
+  Type: bitMaskToSubnetMask :: int -> [ int ]
+
+  Examples:
+    bitMaskToSubnetMask 15
+    => [ 255 254 0 0 ]
+    bitMaskToSubnetMask 24
+    => [ 255 255 255 0 ]
+  */
+  bitMaskToSubnetMask = bitMask: let
+    numOctets = 4;
+    octetBits = 8;
+    octetMin = 0;
+    octetMax = 255;
+    # How many initial parts of the mask are full (=255)
+    fullParts = bitMask / octetBits;
+  in
+    lib.genList (
+      idx:
+      # Fill up initial full parts
+        if idx < fullParts
+        then octetMax
+        # If we're above the first non-full part, fill with 0
+        else if fullParts < idx
+        then octetMin
+        # First non-full part generation
+        else _genPartialMask (lib.mod bitMask octetBits)
+    )
+    numOctets;
+
+  /*
+  Generate a the partial portion of a subnet mask.
+
+  Type: _genPartialMask :: int -> int
+
+  Examples:
+    _genPartialMask 0
+    => 0
+    _genPartialMask 1
+    => 128
+    _genPartialMask 2
+    => 192
+    _genPartialMask 3
+    => 224
+    _genPartialMask 4
+    => 240
+    _genPartialMask 5
+    => 248
+    _genPartialMask 6
+    => 252
+    _genPartialMask 7
+    => 254
+  */
+  _genPartialMask = n:
+    if n == 0
+    then 0
+    else _genPartialMask (n - 1) / 2 + 128;
+
+  /*
+  Parse an IP address.
+
+  Type: parseIpAddress :: str -> [ int ]
+
+  Examples:
+    parseIpAddress "192.168.70.9"
+    => [ 192 168 70 9 ]
+  */
+  parseIpAddress = addr:
+    builtins.map lib.toInt (builtins.match "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" addr);
 
   /*
   Given a CIDR, return the IP Address.
@@ -40,7 +83,7 @@
   cidrToIpAddress = cidr: let
     splitParts = lib.splitString "/" cidr;
   in
-    parseIpAddr (lib.elemAt splitParts 0);
+    parseIpAddress (lib.elemAt splitParts 0);
 
   /*
   Given a CIDR, return the bitmask.
