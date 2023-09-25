@@ -1,8 +1,4 @@
-let
-  pkgs = import <nixpkgs> {};
-  inherit (pkgs) lib;
-  cidr = "192.168.70.9/15";
-
+{lib}: let
   bitMaskToSubnetMask = let
     # Generate a partial mask for an integer from 0 to 7
     #   part 1 = 128
@@ -78,7 +74,7 @@ let
   in
     firstThree ++ [(lastOctet - 1)];
 
-  givemeeverything = cidr: let
+  getNetworkProperties = cidr: let
     ip = cidrToIpAddress cidr;
     bitMask = cidrToBitMask cidr;
     lower = cidrToLowerIp cidr;
@@ -87,5 +83,15 @@ let
     subnetMask = cidrToSubnetMask cidr;
     broadcast = cidrToBroadcastAddress cidr;
   in {inherit ip bitMask lower upper networkId subnetMask broadcast;};
-in
-  givemeeverything cidr
+in {
+  inherit
+    cidrToIpAddress
+    cidrToBitMask
+    cidrToLowerIp
+    cidrToUpperIp
+    cidrToNetworkId
+    cidrToSubnetMask
+    cidrToBroadcastAddress
+    getNetworkProperties
+    ;
+}
