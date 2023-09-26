@@ -133,7 +133,7 @@
 
   Examples:
     cidrToFirstUsableIp "192.168.70.9/15"
-    => [ 192 168 0 0 ]
+    => [ 192 168 0 1 ]
   */
   cidrToFirstUsableIp = cidr: let
     networkId = cidrToNetworkId cidr;
