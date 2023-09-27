@@ -215,22 +215,22 @@
     getNetworkProperties "192.168.70.9/15"
     => {
       bitMask = 15;
-      broadcast = [ 192 169 255 255 ];
-      firstUsableIp = [ 192 168 0 1 ];
-      ipAddress = [ 192 168 70 9 ];
-      lastUsableIp = [ 192 169 255 254 ];
-      networkId = [ 192 168 0 0 ];
-      subnetMask = [ 255 254 0 0 ];
+      broadcast = "192.169.255.255";
+      firstUsableIp = "192.168.0.1";
+      ipAddress = "192.168.70.9";
+      lastUsableIp = "192.169.255.254";
+      networkId = "192.168.0.0";
+      subnetMask = "255.254.0.0";
     }
   */
   getNetworkProperties = cidr: let
-    ipAddress = cidrToIpAddress cidr;
+    ipAddress = prettyIp (cidrToIpAddress cidr);
     bitMask = cidrToBitMask cidr;
-    firstUsableIp = cidrToFirstUsableIp cidr;
-    lastUsableIp = cidrToLastUsableIp cidr;
-    networkId = cidrToNetworkId cidr;
-    subnetMask = cidrToSubnetMask cidr;
-    broadcast = cidrToBroadcastAddress cidr;
+    firstUsableIp = prettyIp (cidrToFirstUsableIp cidr);
+    lastUsableIp = prettyIp (cidrToLastUsableIp cidr);
+    networkId = prettyIp (cidrToNetworkId cidr);
+    subnetMask = prettyIp (cidrToSubnetMask cidr);
+    broadcast = prettyIp (cidrToBroadcastAddress cidr);
   in {inherit ipAddress bitMask firstUsableIp lastUsableIp networkId subnetMask broadcast;};
 in {
   inherit

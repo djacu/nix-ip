@@ -7,24 +7,24 @@ let
       cidr = "192.168.70.9/15";
       truth = {
         bitMask = 15;
-        ipAddress = [192 168 70 9];
-        subnetMask = [255 254 0 0];
-        networkId = [192 168 0 0];
-        firstUsableIp = [192 168 0 1];
-        lastUsableIp = [192 169 255 254];
-        broadcast = [192 169 255 255];
+        ipAddress = "192.168.70.9";
+        subnetMask = "255.254.0.0";
+        networkId = "192.168.0.0";
+        firstUsableIp = "192.168.0.1";
+        lastUsableIp = "192.169.255.254";
+        broadcast = "192.169.255.255";
       };
     }
     {
       cidr = "192.168.70.9/17";
       truth = {
         bitMask = 17;
-        ipAddress = [192 168 70 9];
-        subnetMask = [255 255 128 0];
-        networkId = [192 168 0 0];
-        firstUsableIp = [192 168 0 1];
-        lastUsableIp = [192 168 127 254];
-        broadcast = [192 168 127 255];
+        ipAddress = "192.168.70.9";
+        subnetMask = "255.255.128.0";
+        networkId = "192.168.0.0";
+        firstUsableIp = "192.168.0.1";
+        lastUsableIp = "192.168.127.254";
+        broadcast = "192.168.127.255";
       };
     }
   ];
