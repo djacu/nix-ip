@@ -1,5 +1,17 @@
 {lib}: let
   /*
+  Converts an IP address from a list of ints to a string.
+
+  Type: prettyIp :: [ int ] -> str
+
+  Examples:
+    prettyIp [ 192 168 70 9 ]
+    => "192.168.70.9"
+  */
+  prettyIp = addr:
+    lib.concatStringsSep "." (builtins.map builtins.toString addr);
+
+  /*
   Given a bit mask, return the associated subnet mask.
 
   Type: bitMaskToSubnetMask :: int -> [ int ]
@@ -60,18 +72,6 @@
     else _genPartialMask (n - 1) / 2 + 128;
 
   /*
-  Parse an IP address.
-
-  Type: parseIpAddress :: str -> [ int ]
-
-  Examples:
-    parseIpAddress "192.168.70.9"
-    => [ 192 168 70 9 ]
-  */
-  parseIpAddress = addr:
-    builtins.map lib.toInt (builtins.match "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" addr);
-
-  /*
   Given a CIDR, return the IP Address.
 
   Type: cidrToIpAddress :: str -> [ int ]
@@ -82,8 +82,17 @@
   */
   cidrToIpAddress = cidr: let
     splitParts = lib.splitString "/" cidr;
+    addr = lib.elemAt splitParts 0;
+    parsed =
+      builtins.map
+      lib.toInt
+      (builtins.match "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)" addr);
+    checkBounds = octet:
+      (octet >= 0) && (octet <= 255);
   in
-    parseIpAddress (lib.elemAt splitParts 0);
+    if (builtins.all checkBounds parsed)
+    then parsed
+    else builtins.throw "IP ${prettyIp addr} has out of bounds octet(s)";
 
   /*
   Given a CIDR, return the bitmask.
@@ -91,13 +100,18 @@
   Type: cidrToBitMask :: str -> int
 
   Examples:
-    cidrToIpAddress "192.168.70.9/15"
+    cidrToBitMask "192.168.70.9/15"
     => 15
   */
   cidrToBitMask = cidr: let
     splitParts = lib.splitString "/" cidr;
+    mask = lib.toInt (lib.elemAt splitParts 1);
+    checkBounds = mask:
+      (mask >= 0) && (mask <= 32);
   in
-    lib.toInt (lib.elemAt splitParts 1);
+    if (checkBounds mask)
+    then mask
+    else builtins.throw "Bitmask ${builtins.toString mask} is invalid.";
 
   /*
   Given a CIDR, return the associated subnet mask.
@@ -175,7 +189,7 @@
   Type: cidrToLastUsableIp :: str -> [ int ]
 
   Examples:
-    cidrToLastsableIp "192.168.70.9/15"
+    cidrToLastUsableIp "192.168.70.9/15"
     => [ 192 169 255 254 ]
   */
   cidrToLastUsableIp = cidr: let
