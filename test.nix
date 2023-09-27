@@ -28,13 +28,6 @@ let
       };
     }
   ];
-  #nix-ip = pkgs.fetchFromGitHub {
-  #  owner = "djacu";
-  #  repo = "nix-ip";
-  #  rev = "main";
-  #  sha256 = "sha256-T08YBrSIiiHbAGL5anFCAREoycGfBSQCntUkyXgBzWo=";
-  #};
-  #ipv4 = import (nix-ip + "/default.nix") {inherit lib;};
 in
   builtins.all
   (
