@@ -173,10 +173,8 @@
   */
   cidrToFirstUsableIp = cidr: let
     networkId = cidrToNetworkId cidr;
-    lastOctet = lib.last networkId;
-    firstThree = lib.init networkId;
   in
-    firstThree ++ [(lastOctet + 1)];
+    incrementIp networkId 1;
 
   /*
   Given a CIDR, return the associated broadcast address.
@@ -216,10 +214,25 @@
   */
   cidrToLastUsableIp = cidr: let
     broadcast = cidrToBroadcastAddress cidr;
-    lastOctet = lib.last broadcast;
-    firstThree = lib.init broadcast;
   in
-    firstThree ++ [(lastOctet - 1)];
+    incrementIp broadcast (-1);
+
+  /*
+  Increment the last octet of a given IP address.
+
+  Type: incrementIp :: [ int ] -> int -> [ int ]
+
+  Examples:
+    incrementIp [ 192 168 70 9 ] 3
+    => [ 192 168 70 12 ]
+    incrementIp [ 192 168 70 9 ] (-2)
+    => [ 192 168 70 7 ]
+  */
+  incrementIp = addr: offset: let
+    lastOctet = lib.last addr;
+    firstThree = lib.init addr;
+  in
+    firstThree ++ [(lastOctet + offset)];
 
   /*
   Given a CIDR, return an attribute set of:
@@ -256,6 +269,7 @@
   in {inherit ipAddress bitMask firstUsableIp lastUsableIp networkId subnetMask broadcast;};
 in {
   inherit
+    incrementIp
     bitMaskToSubnetMask
     subnetMaskToBitMask
     cidrToIpAddress
