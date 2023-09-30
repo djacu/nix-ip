@@ -270,6 +270,7 @@
 in {
   ipv4 = {
     inherit
+      prettyIp
       incrementIp
       bitMaskToSubnetMask
       subnetMaskToBitMask
