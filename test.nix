@@ -4,7 +4,7 @@ let
   ip = import ./ip.nix {inherit lib;};
   testIp = {
     testGetNetworkPropertiesTest1 = {
-      expr = ip.getNetworkProperties "192.168.70.9/15";
+      expr = ip.ipv4.getNetworkProperties "192.168.70.9/15";
       expected = {
         bitMask = 15;
         ipAddress = "192.168.70.9";
@@ -16,7 +16,7 @@ let
       };
     };
     testGetNetworkPropertiesTest2 = {
-      expr = ip.getNetworkProperties "192.168.70.9/17";
+      expr = ip.ipv4.getNetworkProperties "192.168.70.9/17";
       expected = {
         bitMask = 17;
         ipAddress = "192.168.70.9";
@@ -28,31 +28,31 @@ let
       };
     };
     testIncrementIp1 = {
-      expr = ip.incrementIp [192 168 70 9] 3;
+      expr = ip.ipv4.incrementIp [192 168 70 9] 3;
       expected = [192 168 70 12];
     };
     testIncrementIp2 = {
-      expr = ip.incrementIp [192 168 70 9] (-2);
+      expr = ip.ipv4.incrementIp [192 168 70 9] (-2);
       expected = [192 168 70 7];
     };
     testSubnetMaskToBitMask1 = {
-      expr = ip.subnetMaskToBitMask [0 0 0 0];
+      expr = ip.ipv4.subnetMaskToBitMask [0 0 0 0];
       expected = 0;
     };
     testSubnetMaskToBitMask2 = {
-      expr = ip.subnetMaskToBitMask [255 254 0 0];
+      expr = ip.ipv4.subnetMaskToBitMask [255 254 0 0];
       expected = 15;
     };
     testSubnetMaskToBitMask3 = {
-      expr = ip.subnetMaskToBitMask [255 255 1 0];
+      expr = ip.ipv4.subnetMaskToBitMask [255 255 1 0];
       expected = 17;
     };
     testSubnetMaskToBitMask4 = {
-      expr = ip.subnetMaskToBitMask [255 255 255 0];
+      expr = ip.ipv4.subnetMaskToBitMask [255 255 255 0];
       expected = 24;
     };
     testSubnetMaskToBitMask5 = {
-      expr = ip.subnetMaskToBitMask [255 255 255 255];
+      expr = ip.ipv4.subnetMaskToBitMask [255 255 255 255];
       expected = 32;
     };
   };

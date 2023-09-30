@@ -268,17 +268,19 @@
     broadcast = prettyIp (cidrToBroadcastAddress cidr);
   in {inherit ipAddress bitMask firstUsableIp lastUsableIp networkId subnetMask broadcast;};
 in {
-  inherit
-    incrementIp
-    bitMaskToSubnetMask
-    subnetMaskToBitMask
-    cidrToIpAddress
-    cidrToBitMask
-    cidrToFirstUsableIp
-    cidrToLastUsableIp
-    cidrToNetworkId
-    cidrToSubnetMask
-    cidrToBroadcastAddress
-    getNetworkProperties
-    ;
+  ipv4 = {
+    inherit
+      incrementIp
+      bitMaskToSubnetMask
+      subnetMaskToBitMask
+      cidrToIpAddress
+      cidrToBitMask
+      cidrToFirstUsableIp
+      cidrToLastUsableIp
+      cidrToNetworkId
+      cidrToSubnetMask
+      cidrToBroadcastAddress
+      getNetworkProperties
+      ;
+  };
 }
