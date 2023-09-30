@@ -235,6 +235,34 @@
     firstThree ++ [(lastOctet + offset)];
 
   /*
+  Given an IP address and bit mask, return the associated CIDR.
+
+  Type: ipAndBitMaskToCidr :: [ int ] -> int -> String
+
+  Examples:
+    ipAndBitMaskToCidr [ 192 168 70 9 ] 15
+    => "192.168.70.9/15"
+  */
+  ipAndBitMaskToCidr = addr: bitMask:
+    lib.concatStringsSep "/"
+    [
+      (prettyIp addr)
+      (builtins.toString bitMask)
+    ];
+
+  /*
+  Given an IP address and subnet mask, return the associated CIDR.
+
+  Type: ipAndSubnetMaskToCidr :: [ int ] -> int -> String
+
+  Examples:
+    ipAndSubnetMaskToCidr [ 192 168 70 9 ] [ 255 254 0 0 ]
+    => "192.168.70.9/15"
+  */
+  ipAndSubnetMaskToCidr = addr: subnetMask:
+    ipAndBitMaskToCidr addr (subnetMaskToBitMask subnetMask);
+
+  /*
   Given a CIDR, return an attribute set of:
     the IP Address,
     the bit mask,
@@ -274,6 +302,8 @@ in {
       incrementIp
       bitMaskToSubnetMask
       subnetMaskToBitMask
+      ipAndBitMaskToCidr
+      ipAndSubnetMaskToCidr
       cidrToIpAddress
       cidrToBitMask
       cidrToFirstUsableIp
