@@ -72,6 +72,28 @@
     else _genPartialMask (n - 1) / 2 + 128;
 
   /*
+  Given a subnet mask, return the associated bit mask.
+
+  Type: subnetMaskToBitMask :: [ int ] -> int
+
+  Examples:
+    subnetMaskToBitMask [ 255 254 0 0 ]
+    => 15
+    subnetMaskToBitMask [ 255 255 255 0 ]
+    => 24
+  */
+  subnetMaskToBitMask = subnetMask: let
+    partialBits = octet:
+      if octet == 0
+      then 0
+      else (lib.mod octet 2) + partialBits (octet / 2);
+  in
+    builtins.foldl'
+    (x: y: x + y)
+    0
+    (builtins.map partialBits subnetMask);
+
+  /*
   Given a CIDR, return the IP Address.
 
   Type: cidrToIpAddress :: str -> [ int ]
@@ -234,6 +256,8 @@
   in {inherit ipAddress bitMask firstUsableIp lastUsableIp networkId subnetMask broadcast;};
 in {
   inherit
+    bitMaskToSubnetMask
+    subnetMaskToBitMask
     cidrToIpAddress
     cidrToBitMask
     cidrToFirstUsableIp

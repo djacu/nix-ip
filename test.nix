@@ -2,7 +2,7 @@ let
   pkgs = import <nixpkgs> {};
   inherit (pkgs) lib;
   nix-ip = import ./default.nix {inherit lib;};
-  testGetNetworkProperties = {
+  testIp = {
     testGetNetworkPropertiesTest1 = {
       expr = nix-ip.getNetworkProperties "192.168.70.9/15";
       expected = {
@@ -27,11 +27,31 @@ let
         broadcast = "192.168.127.255";
       };
     };
+    testSubnetMaskToBitMask1 = {
+      expr = nix-ip.subnetMaskToBitMask [0 0 0 0];
+      expected = 0;
+    };
+    testSubnetMaskToBitMask2 = {
+      expr = nix-ip.subnetMaskToBitMask [255 254 0 0];
+      expected = 15;
+    };
+    testSubnetMaskToBitMask3 = {
+      expr = nix-ip.subnetMaskToBitMask [255 255 1 0];
+      expected = 17;
+    };
+    testSubnetMaskToBitMask4 = {
+      expr = nix-ip.subnetMaskToBitMask [255 255 255 0];
+      expected = 24;
+    };
+    testSubnetMaskToBitMask5 = {
+      expr = nix-ip.subnetMaskToBitMask [255 255 255 255];
+      expected = 32;
+    };
   };
 
   message = msg: builtins.trace "[1;32mMessage: ${msg}[0m";
 
-  testResults = lib.runTests testGetNetworkProperties;
+  testResults = lib.runTests testIp;
 in
   if (builtins.length testResults == 0)
   then message "Everything passed! 😊" testResults
