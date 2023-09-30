@@ -2,10 +2,10 @@ let
   pkgs = import <nixpkgs> {};
   inherit (pkgs) lib;
   nix-ip = import ./default.nix {inherit lib;};
-  test = [
-    {
-      cidr = "192.168.70.9/15";
-      truth = {
+  testGetNetworkProperties = {
+    testGetNetworkPropertiesTest1 = {
+      expr = nix-ip.getNetworkProperties "192.168.70.9/15";
+      expected = {
         bitMask = 15;
         ipAddress = "192.168.70.9";
         subnetMask = "255.254.0.0";
@@ -14,10 +14,10 @@ let
         lastUsableIp = "192.169.255.254";
         broadcast = "192.169.255.255";
       };
-    }
-    {
-      cidr = "192.168.70.9/17";
-      truth = {
+    };
+    testGetNetworkPropertiesTest2 = {
+      expr = nix-ip.getNetworkProperties "192.168.70.9/17";
+      expected = {
         bitMask = 17;
         ipAddress = "192.168.70.9";
         subnetMask = "255.255.128.0";
@@ -26,31 +26,13 @@ let
         lastUsableIp = "192.168.127.254";
         broadcast = "192.168.127.255";
       };
-    }
-  ];
+    };
+  };
+
+  message = msg: builtins.trace "[1;32mMessage: ${msg}[0m";
+
+  testResults = lib.runTests testGetNetworkProperties;
 in
-  builtins.all
-  (
-    elem: let
-      output = nix-ip.getNetworkProperties elem.cidr;
-      comparison = output == elem.truth;
-    in
-      if comparison
-      then comparison
-      else let
-        findAttrsetsDiffs = x: y: let
-          names = builtins.attrNames x;
-        in
-          builtins.map (name: x.${name} != y.${name}) names;
-
-        truthDiffs = findAttrsetsDiffs output elem.truth;
-
-        badNames = lib.flatten (lib.zipListsWith (bool: name:
-          if bool
-          then name
-          else [])
-        truthDiffs (builtins.attrNames output));
-      in
-        throw "Test for CIDR ${elem.cidr} failed ${builtins.toJSON badNames}."
-  )
-  test
+  if (builtins.length testResults == 0)
+  then message "Everything passed! 😊" testResults
+  else lib.warn "Something failed! ☹️" testResults
