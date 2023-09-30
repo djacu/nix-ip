@@ -1,10 +1,10 @@
 let
   pkgs = import <nixpkgs> {};
   inherit (pkgs) lib;
-  nix-ip = import ./default.nix {inherit lib;};
+  ip = import ./ip.nix {inherit lib;};
   testIp = {
     testGetNetworkPropertiesTest1 = {
-      expr = nix-ip.getNetworkProperties "192.168.70.9/15";
+      expr = ip.getNetworkProperties "192.168.70.9/15";
       expected = {
         bitMask = 15;
         ipAddress = "192.168.70.9";
@@ -16,7 +16,7 @@ let
       };
     };
     testGetNetworkPropertiesTest2 = {
-      expr = nix-ip.getNetworkProperties "192.168.70.9/17";
+      expr = ip.getNetworkProperties "192.168.70.9/17";
       expected = {
         bitMask = 17;
         ipAddress = "192.168.70.9";
@@ -28,31 +28,31 @@ let
       };
     };
     testIncrementIp1 = {
-      expr = nix-ip.incrementIp [192 168 70 9] 3;
+      expr = ip.incrementIp [192 168 70 9] 3;
       expected = [192 168 70 12];
     };
     testIncrementIp2 = {
-      expr = nix-ip.incrementIp [192 168 70 9] (-2);
+      expr = ip.incrementIp [192 168 70 9] (-2);
       expected = [192 168 70 7];
     };
     testSubnetMaskToBitMask1 = {
-      expr = nix-ip.subnetMaskToBitMask [0 0 0 0];
+      expr = ip.subnetMaskToBitMask [0 0 0 0];
       expected = 0;
     };
     testSubnetMaskToBitMask2 = {
-      expr = nix-ip.subnetMaskToBitMask [255 254 0 0];
+      expr = ip.subnetMaskToBitMask [255 254 0 0];
       expected = 15;
     };
     testSubnetMaskToBitMask3 = {
-      expr = nix-ip.subnetMaskToBitMask [255 255 1 0];
+      expr = ip.subnetMaskToBitMask [255 255 1 0];
       expected = 17;
     };
     testSubnetMaskToBitMask4 = {
-      expr = nix-ip.subnetMaskToBitMask [255 255 255 0];
+      expr = ip.subnetMaskToBitMask [255 255 255 0];
       expected = 24;
     };
     testSubnetMaskToBitMask5 = {
-      expr = nix-ip.subnetMaskToBitMask [255 255 255 255];
+      expr = ip.subnetMaskToBitMask [255 255 255 255];
       expected = 32;
     };
   };
