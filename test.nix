@@ -9,11 +9,11 @@ let
     };
     testBitMaskToSubnetMask1 = {
       expr = ip.ipv4.bitMaskToSubnetMask 15;
-      expected = [ 255 254 0 0 ];
+      expected = [255 254 0 0];
     };
     testBitMaskToSubnetMask2 = {
       expr = ip.ipv4.bitMaskToSubnetMask 24;
-      expected = [ 255 255 255 0 ];
+      expected = [255 255 255 0];
     };
     testSubnetMaskToBitMask1 = {
       expr = ip.ipv4.subnetMaskToBitMask [0 0 0 0];
@@ -110,6 +110,14 @@ let
     testIncrementIp2 = {
       expr = ip.ipv4.incrementIp [192 168 70 9] (-2);
       expected = [192 168 70 7];
+    };
+    testIpAndBitMaskToCidr = {
+      expr = ip.ipv4.ipAndBitMaskToCidr [192 168 70 9] 15;
+      expected = "192.168.70.9/15";
+    };
+    testIpAndSubnetMaskToCidr = {
+      expr = ip.ipv4.ipAndSubnetMaskToCidr [192 168 70 9] [255 254 0 0];
+      expected = "192.168.70.9/15";
     };
     testGetNetworkPropertiesTest1 = {
       expr = ip.ipv4.getNetworkProperties "192.168.70.9/15";
