@@ -27,6 +27,14 @@ let
         broadcast = "192.168.127.255";
       };
     };
+    testIncrementIp1 = {
+      expr = nix-ip.incrementIp [192 168 70 9] 3;
+      expected = [192 168 70 12];
+    };
+    testIncrementIp2 = {
+      expr = nix-ip.incrementIp [192 168 70 9] (-2);
+      expected = [192 168 70 7];
+    };
     testSubnetMaskToBitMask1 = {
       expr = nix-ip.subnetMaskToBitMask [0 0 0 0];
       expected = 0;
