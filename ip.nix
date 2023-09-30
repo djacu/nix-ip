@@ -2,7 +2,7 @@
   /*
   Converts an IP address from a list of ints to a string.
 
-  Type: prettyIp :: [ int ] -> str
+  Type: prettyIp :: [ Int ] -> String
 
   Examples:
     prettyIp [ 192 168 70 9 ]
@@ -14,7 +14,7 @@
   /*
   Given a bit mask, return the associated subnet mask.
 
-  Type: bitMaskToSubnetMask :: int -> [ int ]
+  Type: bitMaskToSubnetMask :: Int -> [ Int ]
 
   Examples:
     bitMaskToSubnetMask 15
@@ -46,7 +46,7 @@
   /*
   Generate a the partial portion of a subnet mask.
 
-  Type: _genPartialMask :: int -> int
+  Type: _genPartialMask :: Int -> Int
 
   Examples:
     _genPartialMask 0
@@ -74,7 +74,7 @@
   /*
   Given a subnet mask, return the associated bit mask.
 
-  Type: subnetMaskToBitMask :: [ int ] -> int
+  Type: subnetMaskToBitMask :: [ Int ] -> Int
 
   Examples:
     subnetMaskToBitMask [ 255 254 0 0 ]
@@ -96,7 +96,7 @@
   /*
   Given a CIDR, return the IP Address.
 
-  Type: cidrToIpAddress :: str -> [ int ]
+  Type: cidrToIpAddress :: String -> [ Int ]
 
   Examples:
     cidrToIpAddress "192.168.70.9/15"
@@ -119,7 +119,7 @@
   /*
   Given a CIDR, return the bitmask.
 
-  Type: cidrToBitMask :: str -> int
+  Type: cidrToBitMask :: String -> Int
 
   Examples:
     cidrToBitMask "192.168.70.9/15"
@@ -138,7 +138,7 @@
   /*
   Given a CIDR, return the associated subnet mask.
 
-  Type: cidrToSubnetMask :: str -> [ int ]
+  Type: cidrToSubnetMask :: String -> [ Int ]
 
   Examples:
     cidrToSubnetMask "192.168.70.9/15"
@@ -150,7 +150,7 @@
   /*
   Given a CIDR, return the associated network ID.
 
-  Type: cidrToNetworkId :: str -> [ int ]
+  Type: cidrToNetworkId :: String -> [ Int ]
 
   Examples:
     cidrToNetworkId "192.168.70.9/15"
@@ -165,7 +165,7 @@
   /*
   Given a CIDR, return the associated first usable IP address.
 
-  Type: cidrToFirstUsableIp :: str -> [ int ]
+  Type: cidrToFirstUsableIp :: String -> [ Int ]
 
   Examples:
     cidrToFirstUsableIp "192.168.70.9/15"
@@ -179,7 +179,7 @@
   /*
   Given a CIDR, return the associated broadcast address.
 
-  Type: cidrToBroadcastAddress :: str -> [ int ]
+  Type: cidrToBroadcastAddress :: String -> [ Int ]
 
   Examples:
     cidrToBroadcastAddress "192.168.70.9/15"
@@ -194,7 +194,7 @@
   /*
   Given a network ID and subnet mask, return the associated broadcast address.
 
-  Type: getBroadcastAddress :: [ int ] -> [ int ] -> [ int ]
+  Type: getBroadcastAddress :: [ Int ] -> [ Int ] -> [ Int ]
 
   Examples:
     getBroadcastAddress [ 192 168 0 0 ] [ 255 254 0 0 ]
@@ -206,7 +206,7 @@
   /*
   Given a CIDR, return the associated last usable IP address.
 
-  Type: cidrToLastUsableIp :: str -> [ int ]
+  Type: cidrToLastUsableIp :: String -> [ Int ]
 
   Examples:
     cidrToLastUsableIp "192.168.70.9/15"
@@ -220,7 +220,7 @@
   /*
   Increment the last octet of a given IP address.
 
-  Type: incrementIp :: [ int ] -> int -> [ int ]
+  Type: incrementIp :: [ Int ] -> Int -> [ Int ]
 
   Examples:
     incrementIp [ 192 168 70 9 ] 3
@@ -237,7 +237,7 @@
   /*
   Given an IP address and bit mask, return the associated CIDR.
 
-  Type: ipAndBitMaskToCidr :: [ int ] -> int -> String
+  Type: ipAndBitMaskToCidr :: [ Int ] -> Int -> String
 
   Examples:
     ipAndBitMaskToCidr [ 192 168 70 9 ] 15
@@ -253,7 +253,7 @@
   /*
   Given an IP address and subnet mask, return the associated CIDR.
 
-  Type: ipAndSubnetMaskToCidr :: [ int ] -> int -> String
+  Type: ipAndSubnetMaskToCidr :: [ Int ] -> Int -> String
 
   Examples:
     ipAndSubnetMaskToCidr [ 192 168 70 9 ] [ 255 254 0 0 ]
